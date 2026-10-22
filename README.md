@@ -85,60 +85,28 @@ AI_BATTERY_OPTIMIZATION/
 ## Architecture Diagram
 
 ```mermaid
-graph TD
-    A[Backend (Java Spring Boot)] -->|REST API| B[Frontend (React)]
+flowchart TD
+    backend[Backend<br/>(Java Spring Boot)] -->|REST API| frontend[Frontend<br/>(React)]
     
-    A -->|ML & Prediction| C[ML Services]
-    C -->|XGBoost RUL| D[RUL Calculator]
-    C -->|SoH Calculation| E[SoH Calculator]
-    C -->|Telemetry NV| F[Telemetry Normalization]
+    backend -->|ML & Prediction| ml[ML Services]
+    ml -->|XGBoost RUL| rul[RUL Calculator]
+    ml -->|SoH Calculation| soh[SoH Calculator]
+    ml -->|Telemetry NV| telemetry[Telemetry Normalization]
     
-    A -->|Data Processing| G[CSV Parsing & Validation]
-    G -->|Normalized Data| F
+    backend -->|Data Processing| processing[CSV Parsing & Validation]
+    processing -->|Normalized Data| telemetry
     
-    A -->|External Services| H[OpenChargeMap API]
-    H -->|Station Data| A
+    backend -->|External Services| external[OpenChargeMap API]
+    external -->|Station Data| backend
     
-    A -->|Database/Files| I[(Storage)]
-    I -->|Telemetry CSV| F
-    I -->|Model Artifacts| C
-    I -->|SHAP Explanations| J[shap_explainer.py]
+    backend -->|Database/Files| storage[(Storage)]
+    storage -->|Telemetry CSV| telemetry
+    storage -->|Model Artifacts| ml
+    storage -->|SHAP Explanations| shap[shap_explainer.py]
     
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#cfc,stroke:#333,stroke-width:2px
-```
-
-## Use Case Diagram
-
-```mermaid
-usecase "Battery Management" {
-    actor "User"
-    usecase "View SoH Status"
-    usecase "View RUL Prediction"
-    usecase "Analyze Telemetry"
-}
-
-usecase "Charging Optimization" {
-    actor "User"
-    usecase "Start Charging Session"
-    usecase "End Charging Session"
-    usecase "View Charging History"
-}
-
-usecase "Vehicle Management" {
-    actor "User"
-    usecase "Add Vehicle"
-    usecase "Upload Documents"
-    usecase "View Vehicle Details"
-}
-
-usecase "Station Recommendation" {
-    actor "User"
-    usecase "Find Charging Stations"
-    usecase "Filter by Connector"
-    usecase "Estimate Charging Time"
-}
+    classDef backend fill:#f9f,stroke:#333,stroke-width:2px
+    classDef frontend fill:#bbf,stroke:#333,stroke-width:2px
+    classDef ml fill:#cfc,stroke:#333,stroke-width:2px
 ```
 
 ## Key Features
