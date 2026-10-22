@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# Battery Optimization System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comprehensive AI-powered battery optimization system for electric vehicles.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project implements advanced battery management and optimization techniques using machine learning models and real-time telemetry data. The system includes:
 
-## React Compiler
+- **AI Battery Prediction**: Machine learning models (XGBoost, RUL calculator, SoH calculator) for battery state prediction
+- **Telemetry Processing**: Real-time data normalization and validation
+- **Vehicle Services**: Vehicle service integration and document parsing
+- **Charging Optimization**: Intelligent charging session management
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## Architecture
 
-## Expanding the ESLint configuration
+The system consists of two main components:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **AI-battery** (`AI-battery/`): Java-based backend with Spring Boot, ML services, and battery analytics
+2. **EV Battery Frontend** (`ev-battery-frontend/`): React + TypeScript frontend for visualization and user interaction
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Battery State of Health (SoH) calculation
+- Remaining Useful Life (RUL) prediction
+- Charging session optimization
+- Vehicle document processing
+- Real-time telemetry monitoring
+- Station recommendation services
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+### Backend (AI-battery)
+
+```bash
+cd AI-battery
+./mvnw spring-boot:run
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Frontend (ev-battery-frontend)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+cd ev-battery-frontend
+npm install
+npm run dev
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Technologies
+
+- Java 17, Spring Boot
+- XGBoost, Python ML models
+- React 18, TypeScript, Vite
+- Apache Maven
 ```
