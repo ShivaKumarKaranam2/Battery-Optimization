@@ -24,7 +24,6 @@ AI_BATTERY_OPTIMIZATION/
 │   ├── pom.xml
 │   ├── mvnw
 │   ├── requirements.txt
-│   ├── shap_explainer.py
 │   ├── xgboost_predictor.py
 │   ├── README_XGBOOST.md
 │   ├── .mvn/
@@ -85,48 +84,61 @@ AI_BATTERY_OPTIMIZATION/
 
 ## Architecture Diagram
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    AI BATTERY OPTIMIZATION                     │
-├─────────────────────┬──────────────────────────────────────┤
-│                     BACKEND (Java)                              │
-│  ┌─────────────────────┐  REST API  ┌─────────────────────┐  │
-│  │  ML & Prediction    │  ──────────▶│  Frontend (React)   │  │
-│  │  - XGBoost RUL      │            │  - Battery Dashboard│  │
-│  │  - SoH Calculation  │            │  - Charging Optmzn  │  │
-│  │  - Telemetry NV     │            │  - Vehicle Mgmt     │  │
-│  └─────────────────────┘            └─────────────────────┘  │
-│           │                                      │              │
-│  ┌─────────────────────┐                │              │
-│  │  Data Processing    │                │              │
-│  │  - CSV Parsing      │                │              │
-│  │  - Normalization    │                │              │
-│  │  - Validation       │                │              │
-│  └─────────────────────┘                │              │
-│                                        ▼              │
-│  ┌─────────────────────┐                ┌──────────────┐ │
-│  │  External Services  │  ────────────▶│  OpenChargeMap│ │
-│  │  - Station Reco     │                │  API          │ │
-│  │  - Map Data         │                └──────────────┘ │
-│  └─────────────────────┘                             │     │
-└─────────────────────────────────────────────────────────────┘
-                    ▲
-                    │
-┌─────────────────────┐
-│    DATABASE/FILES   │
-│  - Telemetry CSV    │
-│  - Model Artifacts  │
-│  - Shap Explanations│
-└─────────────────────┘
+```mermaid
+graph TD
+    A[Backend (Java Spring Boot)] -->|REST API| B[Frontend (React)]
+    
+    A -->|ML & Prediction| C[ML Services]
+    C -->|XGBoost RUL| D[RUL Calculator]
+    C -->|SoH Calculation| E[SoH Calculator]
+    C -->|Telemetry NV| F[Telemetry Normalization]
+    
+    A -->|Data Processing| G[CSV Parsing & Validation]
+    G -->|Normalized Data| F
+    
+    A -->|External Services| H[OpenChargeMap API]
+    H -->|Station Data| A
+    
+    A -->|Database/Files| I[(Storage)]
+    I -->|Telemetry CSV| F
+    I -->|Model Artifacts| C
+    I -->|SHAP Explanations| J[shap_explainer.py]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#cfc,stroke:#333,stroke-width:2px
 ```
 
 ## Use Case Diagram
 
 ```mermaid
-usecase "Manage Battery Health" { actor "User"; usecase "View SoH Status"; usecase "View RUL Prediction"; usecase "Analyze Telemetry"; }
-usecase "Optimize Charging" { actor "User"; usecase "Start Charging Session"; usecase "End Charging Session"; usecase "View Charging History"; }
-usecase "Vehicle Management" { actor "User"; usecase "Add Vehicle"; usecase "Upload Documents"; usecase "View Vehicle Details"; }
-usecase "Station Recommendation" { actor "User"; usecase "Find Charging Stations"; usecase "Filter by Connector"; usecase "Estimate Charging Time"; }
+usecase "Battery Management" {
+    actor "User"
+    usecase "View SoH Status"
+    usecase "View RUL Prediction"
+    usecase "Analyze Telemetry"
+}
+
+usecase "Charging Optimization" {
+    actor "User"
+    usecase "Start Charging Session"
+    usecase "End Charging Session"
+    usecase "View Charging History"
+}
+
+usecase "Vehicle Management" {
+    actor "User"
+    usecase "Add Vehicle"
+    usecase "Upload Documents"
+    usecase "View Vehicle Details"
+}
+
+usecase "Station Recommendation" {
+    actor "User"
+    usecase "Find Charging Stations"
+    usecase "Filter by Connector"
+    usecase "Estimate Charging Time"
+}
 ```
 
 ## Key Features
